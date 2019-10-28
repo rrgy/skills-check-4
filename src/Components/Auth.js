@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { connect } from 'react-redux'
+import { actionBuilder } from '../ducks/reducer'
 
 class Auth extends Component {
     constructor() {
@@ -13,19 +15,22 @@ class Auth extends Component {
         this.setState({ [e.target.name]: e.target.value })
     }
     register() {
-        axios.post('/auth/register', { username: this.state.username, password: this.state.password }).then(res => {
-            this.setState({ email: '', password: '' })
-            this.props.history.push('/dashboard')
-        })
+        axios.post('/auth/register', { username: this.state.username, password: this.state.password })
+            .then(
+                this.setState({ username: '', password: '' }),
+                this.props.history.push('/dashboard')
+            )
+            .catch(err => console.log(err))
+        this.props.actionBuilder()
     }
     login() {
-        axios.post('/auth/login', { username: this.state.username, password: this.state.password }).then(res => {
-            this.setState({ email: '', password: '' })
+        axios.post('/auth/login', { username: this.state.username, password: this.state.password }).then(
+            this.setState({ username: '', password: '' }),
             this.props.history.push('/dashboard')
-        })
+        )
+        this.props.actionBuilder()
     }
     render() {
-        // console.log(this.props)
         return (
             <div>Auth
                 <input
@@ -45,4 +50,4 @@ class Auth extends Component {
     }
 }
 
-export default Auth
+export default connect(null, { actionBuilder })(Auth)

@@ -1,6 +1,6 @@
 insert into users(
     username,
-    password,
+    password
 ) values(
     $1,
     $2
